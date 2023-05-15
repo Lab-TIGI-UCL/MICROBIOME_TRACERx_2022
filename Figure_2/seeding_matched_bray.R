@@ -358,21 +358,3 @@ p + scale_fill_manual(values = c("deepskyblue4", "darkorange", "deeppink")) + th
                                                                                     axis.text.y = element_text(face="bold",size=14),
                                                                                     axis.text.x = element_text(face="bold",size=14))
 
-
-
-tmp[tmp == "UM_Primary_NonPrimary"] <- "Unmatched"
-tmp[tmp == "M_Primary_NonPrimary"] <- "Matched"
-
-small_region_mat <- tmp
-
-tmp_new <- tmp %>% select(Full_Name, bray, batch_same)
-order_t <- c("UM_Primary_NonPrimary","M_Primary_NonPrimary")
-tmp_new$Full_Name <- factor(tmp_new$Full_Name, levels = order_t)
-tmp_new$batch_same <- factor(tmp_new$batch_same, levels = order)
-
-fit = lm(bray ~ batch_same + Full_Name, data = tmp)
-summary(fit)
-small_region_mat <- small_region_mat %>% as.data.frame()
-
-p <- ggplot(small_region_mat, aes(x= Full_Name, y= jaccard_Score, fill = total)) + geom_boxplot()
-p + theme_classic()  + scale_fill_brewer(palette = "PuBu") + xlab("Type of comparison") + ylab("Similarity Index") + stat_compare_means() 
